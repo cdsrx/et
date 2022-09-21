@@ -9,6 +9,9 @@ import "google/protobuf/timestamp.proto";
 service SportsEvents {
 	// ListEvents will return a collection of all events.
 	rpc ListEvents(ListEventsRequest) returns (ListEventsResponse) {}
+
+	// GetEvent will return an event that matches the event id
+	rpc GetEvent(GetEventRequest) returns (GetEventsResponse) {}
 }
 
 /* Requests/Responses */
@@ -31,6 +34,15 @@ message ListEventsRequestFilter {
 	oneof has_visible {
 		bool visible = 2;
 	}
+}
+
+message GetEventRequest {
+	int64 id = 1;
+}
+
+// Response to GetEvent call.
+message GetEventsResponse {
+	Event event = 1;
 }
 
 /* Resources */
