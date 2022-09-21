@@ -15,6 +15,9 @@ service SportsEvents {
 
 message ListEventsRequest {
 	ListEventsRequestFilter filter = 1;
+	oneof has_order_by {
+		string order_by = 2;
+	}
 }
 
 // Response to ListEvents call.

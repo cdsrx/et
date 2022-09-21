@@ -64,6 +64,15 @@ curl -X "POST" "http://localhost:8080/racing/SportsEvents/listEvents" \
 }'
 ```
 
+Request with order by parameter (ASC/DESC default ASC):
+```bash
+curl -X "POST" "http://localhost:8080/racing/SportsEvents/listEvents" \
+     -H 'Content-Type: application/json' \
+     -d $'{
+  "filter": {"visible":false},"orderBy":"DESC"
+}'
+```
+
 6. Stop the service
 ```bash
 micro kill racing
