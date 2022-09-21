@@ -7,13 +7,13 @@ import (
 )
 
 func (r *EventsRepo) seed() error {
-	statement, err := r.db.Prepare(`CREATE TABLE IF NOT EXISTS races (id INTEGER PRIMARY KEY, meeting_id INTEGER, name TEXT, number INTEGER, visible INTEGER, advertised_start_time DATETIME)`)
+	statement, err := r.db.Prepare(`CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY, meeting_id INTEGER, name TEXT, number INTEGER, visible INTEGER, advertised_start_time DATETIME)`)
 	if err == nil {
 		_, err = statement.Exec()
 	}
 
 	for i := 1; i <= 100; i++ {
-		statement, err = r.db.Prepare(`INSERT OR IGNORE INTO races(id, meeting_id, name, number, visible, advertised_start_time) VALUES (?,?,?,?,?,?)`)
+		statement, err = r.db.Prepare(`INSERT OR IGNORE INTO events(id, meeting_id, name, number, visible, advertised_start_time) VALUES (?,?,?,?,?,?)`)
 		if err == nil {
 			_, err = statement.Exec(
 				i,

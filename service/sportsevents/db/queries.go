@@ -14,7 +14,7 @@ func getEventQueries() map[string]string {
 				number, 
 				visible, 
 				advertised_start_time 
-			FROM races
+			FROM events
 		`,
 	}
 }
