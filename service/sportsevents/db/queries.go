@@ -1,12 +1,12 @@
 package db
 
 const (
-	racesList = "list"
+	eventsList = "list"
 )
 
-func getRaceQueries() map[string]string {
+func getEventQueries() map[string]string {
 	return map[string]string{
-		racesList: `
+		eventsList: `
 			SELECT 
 				id, 
 				meeting_id, 
