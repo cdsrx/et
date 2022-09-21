@@ -49,4 +49,6 @@ message Event {
 	bool visible = 5;
 	// AdvertisedStartTime is the time the event is advertised to run.
 	google.protobuf.Timestamp advertised_start_time = 6;
+	// Status is CLOSED if the event's AdvertisedStartTime is in the past, otherwise it is OPEN
+	string status = 7;
 }

@@ -136,6 +136,13 @@ func (m *EventsRepo) scanEvents(
 
 		event.AdvertisedStartTime = ts
 
+		// Set status based on AdvertisedStartTime
+		if time.Now().After(ts.AsTime()) {
+			event.Status = "CLOSED"
+		} else {
+			event.Status = "OPEN"
+		}
+
 		events = append(events, &event)
 	}
 
