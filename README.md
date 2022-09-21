@@ -82,8 +82,51 @@ curl -X "POST" "http://localhost:8080/racing/SportsEvents/getEvent" \
 }'
 ```
 
-#### 6. Stop the service
+#### 6. Running multiple services
+
+To run multiple instances of the events service, simply run the micro command with different service names
+
+Example:
+
+Start the Formule One service
+```bash
+micro run --env_vars DBPATH="/path/to/formulaone.db" --env_vars DBSEED="true" --name formulaone service/sportsevents
+```
+
+Start the MotoGP service
+```bash
+micro run --env_vars DBPATH="/path/to/motogp.db" --env_vars DBSEED="true" --name motogp service/sportsevents
+```
+
+Use the service name to make a request to a specific service.
+
+Request to the Formula One service
+```bash
+curl -X "POST" "http://localhost:8080/formulaone/SportsEvents/listEvents" \
+     -H 'Content-Type: application/json' \
+     -d $'{
+  "filter": {"visible":true},"orderBy":"ASC"
+}'
+```
+
+Request to the MotoGP service
+```bash
+curl -X "POST" "http://localhost:8080/racing/motogp/getEvent" \
+     -H 'Content-Type: application/json' \
+     -d $'{
+  "id":35
+}'
+```
+
+
+#### 7. Stop the service
 ```bash
 micro kill racing
+```
+```bash
+micro kill formulaone
+```
+```bash
+micro kill motogp
 ```
 
