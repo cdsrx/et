@@ -30,6 +30,12 @@ To provide a path for database, set the DBPATH environment variable.
 micro run --env_vars DBPATH="/path/to/racing.db" --name racing service/sportsevents
 ```
 
+Add `--env_vars DBSEED="true"` to seed the database with dummy data
+
+```bash
+micro run --env_vars DBPATH="/path/to/racing.db" --env_vars DBSEED="true" --name racing service/sportsevents
+```
+
 Make sure the service is running by checking its status
 ```bash
 $ micro status

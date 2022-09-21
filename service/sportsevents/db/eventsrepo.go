@@ -24,9 +24,9 @@ type EventsRepo struct {
 }
 
 // New returns a new initialised EventsRepo
-func New(db *sql.DB) (*EventsRepo, error) {
+func New(db *sql.DB, seed bool) (*EventsRepo, error) {
 	eventsRepo := &EventsRepo{db: db}
-	err := eventsRepo.Init()
+	err := eventsRepo.Setup(seed)
 	if err != nil {
 		return nil, err
 	}
@@ -34,12 +34,23 @@ func New(db *sql.DB) (*EventsRepo, error) {
 }
 
 // Init prepares the Event repository dummy data.
-func (r *EventsRepo) Init() error {
+func (r *EventsRepo) Setup(seed bool) error {
 	var err error
 
 	r.init.Do(func() {
-		// For test/example purposes, we seed the DB with some dummy Events.
-		err = r.seed()
+		// Make sure the tables are set up
+		err = r.setup()
+		if err != nil {
+			return
+		}
+
+		// For test/example purposes, we can optionally seed the DB with some dummy Events.
+		if seed {
+			err = r.seed()
+			if err != nil {
+				return
+			}
+		}
 	})
 
 	return err
