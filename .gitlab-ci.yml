@@ -1,0 +1,10 @@
+test:
+  stage: test
+  image: homebrew/brew
+  before_script:
+    - brew install gcc@5 go protobuf
+    - go env | grep GOPATH
+    - export PATH="$PATH:$(go env GOPATH)/bin"
+    - (cd service/sportsevents && make init && make proto)
+  script:
+    - "(cd service/sportsevents && make build)"
