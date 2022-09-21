@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 	sportsevents "github.com/cdsrx/et/service/sportsevents/proto"
 	"github.com/golang/protobuf/ptypes"
 	"strings"
@@ -15,7 +16,10 @@ type EventsRepository interface {
 	Init() error
 
 	// List will return a list of events.
-	List(filter *sportsevents.ListEventsRequestFilter) ([]*sportsevents.Event, error)
+	List(filter *sportsevents.ListEventsRequestFilter, orderBy string) ([]*sportsevents.Event, error)
+
+	// Get will return an event that matches the given id
+	Get(id int64) (*sportsevents.Event, error)
 }
 
 type EventsRepo struct {
@@ -57,15 +61,9 @@ func (r *EventsRepo) Setup(seed bool) error {
 }
 
 func (r *EventsRepo) List(filter *sportsevents.ListEventsRequestFilter, orderBy string) ([]*sportsevents.Event, error) {
-	var (
-		err   error
-		query string
-		args  []interface{}
-	)
+	query := getEventQueries()[eventsList]
 
-	query = getEventQueries()[eventsList]
-
-	query, args = r.applyFilter(query, filter)
+	query, args := r.applyFilter(query, filter)
 
 	query = r.applyOrder(query, orderBy)
 
@@ -75,6 +73,31 @@ func (r *EventsRepo) List(filter *sportsevents.ListEventsRequestFilter, orderBy 
 	}
 
 	return r.scanEvents(rows)
+}
+
+func (r *EventsRepo) Get(id int64) (*sportsevents.Event, error) {
+	var args []interface{}
+	args = append(args, id)
+
+	query := getEventQueries()[event]
+
+	rows, err := r.db.Query(query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	evt, err := r.scanEvents(rows)
+	if err != nil {
+		return nil, err
+	}
+
+	// There should only be one event per ID
+	eventCount := len(evt)
+	if eventCount == 1 {
+		return evt[0], nil
+	} else {
+		return nil, fmt.Errorf("found %d events for event: id %d", eventCount, id)
+	}
 }
 
 func (r *EventsRepo) applyFilter(query string, filter *sportsevents.ListEventsRequestFilter) (string, []interface{}) {

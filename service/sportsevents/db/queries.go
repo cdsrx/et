@@ -2,6 +2,7 @@ package db
 
 const (
 	eventsList = "list"
+	event      = "event"
 )
 
 func getEventQueries() map[string]string {
@@ -16,5 +17,15 @@ func getEventQueries() map[string]string {
 				advertised_start_time 
 			FROM events
 		`,
+		event: `
+			SELECT
+				id,
+				meeting_id,
+				name,
+				number,
+				visible,
+				advertised_start_time
+			FROM events
+			WHERE id = ?`,
 	}
 }

@@ -45,6 +45,8 @@ func NewSportsEventsEndpoints() []*api.Endpoint {
 type SportsEventsService interface {
 	// ListEvents will return a collection of all events.
 	ListEvents(ctx context.Context, in *ListEventsRequest, opts ...client.CallOption) (*ListEventsResponse, error)
+	// GetEvent will return an event that matches the event id
+	GetEvent(ctx context.Context, in *GetEventRequest, opts ...client.CallOption) (*GetEventsResponse, error)
 }
 
 type sportsEventsService struct {
@@ -69,16 +71,29 @@ func (c *sportsEventsService) ListEvents(ctx context.Context, in *ListEventsRequ
 	return out, nil
 }
 
+func (c *sportsEventsService) GetEvent(ctx context.Context, in *GetEventRequest, opts ...client.CallOption) (*GetEventsResponse, error) {
+	req := c.c.NewRequest(c.name, "SportsEvents.GetEvent", in)
+	out := new(GetEventsResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for SportsEvents service
 
 type SportsEventsHandler interface {
 	// ListEvents will return a collection of all events.
 	ListEvents(context.Context, *ListEventsRequest, *ListEventsResponse) error
+	// GetEvent will return an event that matches the event id
+	GetEvent(context.Context, *GetEventRequest, *GetEventsResponse) error
 }
 
 func RegisterSportsEventsHandler(s server.Server, hdlr SportsEventsHandler, opts ...server.HandlerOption) error {
 	type sportsEvents interface {
 		ListEvents(ctx context.Context, in *ListEventsRequest, out *ListEventsResponse) error
+		GetEvent(ctx context.Context, in *GetEventRequest, out *GetEventsResponse) error
 	}
 	type SportsEvents struct {
 		sportsEvents
@@ -93,4 +108,8 @@ type sportsEventsHandler struct {
 
 func (h *sportsEventsHandler) ListEvents(ctx context.Context, in *ListEventsRequest, out *ListEventsResponse) error {
 	return h.SportsEventsHandler.ListEvents(ctx, in, out)
+}
+
+func (h *sportsEventsHandler) GetEvent(ctx context.Context, in *GetEventRequest, out *GetEventsResponse) error {
+	return h.SportsEventsHandler.GetEvent(ctx, in, out)
 }

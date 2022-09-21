@@ -2,7 +2,7 @@
 
 ### Getting Started
 
-1. Install Go (latest).
+#### 1. Install Go (latest).
 
 ```bash
 brew install go
@@ -10,15 +10,15 @@ brew install go
 
 ... or [see here](https://golang.org/doc/install).
 
-2. Install micro : see this [getting started](https://micro.dev/getting-started#install) link
+#### 2. Install micro : see this [getting started](https://micro.dev/getting-started#install) link
 
 
-3. Start micro
+#### 3. Start micro
 ```bash
 micro server
 ```
 
-4. In another terminal window, start the sports events service by running micro and passing the desired service name. e.g. _racing_
+#### 4. In another terminal window, start the sports events service by running micro and passing the desired service name. e.g. _racing_
 ```bash
 micro run -name racing service/sportsevents
 ```
@@ -48,7 +48,7 @@ The service logs can be checked using this command
 micro logs -f racing
 ```
 
-5. Make a request for racing events... 
+#### 5. Make a request for racing events... 
 
 Request with no filters:
 ```bash
@@ -73,7 +73,16 @@ curl -X "POST" "http://localhost:8080/racing/SportsEvents/listEvents" \
 }'
 ```
 
-6. Stop the service
+Getting an event via an event ID
+```bash
+curl -X "POST" "http://localhost:8080/racing/SportsEvents/getEvent" \
+     -H 'Content-Type: application/json' \
+     -d $'{
+  "id":10
+}'
+```
+
+#### 6. Stop the service
 ```bash
 micro kill racing
 ```

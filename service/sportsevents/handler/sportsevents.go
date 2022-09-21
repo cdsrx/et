@@ -35,6 +35,17 @@ func (s *Events) ListEvents(ctx context.Context, request *sportsevents.ListEvent
 	if err != nil {
 		return err
 	}
+
 	response.Events = listEventResponse
+	return nil
+}
+
+func (s *Events) GetEvent(ctx context.Context, request *sportsevents.GetEventRequest, response *sportsevents.GetEventsResponse) error {
+	event, err := s.eventsRepo.Get(request.GetId())
+	if err != nil {
+		return err
+	}
+
+	response.Event = event
 	return nil
 }
