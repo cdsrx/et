@@ -56,7 +56,7 @@ func (r *EventsRepo) Setup(seed bool) error {
 	return err
 }
 
-func (r *EventsRepo) List(filter *sportsevents.ListEventsRequestFilter) ([]*sportsevents.Event, error) {
+func (r *EventsRepo) List(filter *sportsevents.ListEventsRequestFilter, orderBy string) ([]*sportsevents.Event, error) {
 	var (
 		err   error
 		query string
@@ -66,6 +66,8 @@ func (r *EventsRepo) List(filter *sportsevents.ListEventsRequestFilter) ([]*spor
 	query = getEventQueries()[eventsList]
 
 	query, args = r.applyFilter(query, filter)
+
+	query = r.applyOrder(query, orderBy)
 
 	rows, err := r.db.Query(query, args...)
 	if err != nil {
@@ -103,6 +105,11 @@ func (r *EventsRepo) applyFilter(query string, filter *sportsevents.ListEventsRe
 	}
 
 	return query, args
+}
+
+func (r *EventsRepo) applyOrder(query string, orderBy string) string {
+	query += " ORDER BY advertised_start_time " + orderBy
+	return query
 }
 
 func (m *EventsRepo) scanEvents(
