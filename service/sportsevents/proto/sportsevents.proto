@@ -25,6 +25,9 @@ message ListEventsResponse {
 // Filter for listing events.
 message ListEventsRequestFilter {
 	repeated int64 meeting_ids = 1;
+	oneof has_visible {
+		bool visible = 2;
+	}
 }
 
 /* Resources */

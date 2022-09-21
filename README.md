@@ -44,10 +44,22 @@ micro logs -f racing
 
 5. Make a request for racing events... 
 
+Request with no filters:
+```bash
+curl -X "POST" "http://localhost:8080/racing/SportsEvents/listEvents"
+```
+
+Request with visible filter (true/false):
 ```bash
 curl -X "POST" "http://localhost:8080/racing/SportsEvents/listEvents" \
      -H 'Content-Type: application/json' \
      -d $'{
-  "filter": {}
+  "filter": {"visible":true}
 }'
 ```
+
+6. Stop the service
+```bash
+micro kill racing
+```
+

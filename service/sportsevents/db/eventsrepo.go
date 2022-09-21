@@ -82,6 +82,11 @@ func (r *EventsRepo) applyFilter(query string, filter *sportsevents.ListEventsRe
 		}
 	}
 
+	if filter.GetHasVisible() != nil {
+		clauses = append(clauses, "visible = ?")
+		args = append(args, filter.GetVisible())
+	}
+
 	if len(clauses) != 0 {
 		query += " WHERE " + strings.Join(clauses, " AND ")
 	}
